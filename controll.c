@@ -3,12 +3,12 @@
 #include"snake.c"
 void main()
 {
-    int gd =DETECT, gm,maxx=getmaxx(),maxy=getmaxy(),radius,incx,incy;
+    int gd =DETECT, gm;
+    initgraph(&gd, &gm, NULL);
+    int maxx=getmaxx(),maxy=getmaxy(),radius=5,length=3,incx,incy;
     char ch;
     struct snake_body_parts *head;
-
-    initgraph(&gd, &gm, NULL);
-    head=create_default_snake(50,50,5,2);
+    head=create_default_snake(50,50,radius,length);
     while(1)
     {
         if(kbhit())
