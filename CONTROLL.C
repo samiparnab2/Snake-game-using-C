@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <graphics.h>
 #include <string.h>
+#include<dos.h>
 //////////////////////////////////////////////////////////////////////////////////////
 struct snake_body_parts
 {
@@ -81,7 +82,7 @@ struct snake_body_parts *create_default_snake(int x, int y, int radius, int len)
 	return head;
 }
 
-int touch_itself(struct snake_body_parts *head)
+int if_touch_itself(struct snake_body_parts *head)
 {
 	struct snake_body_parts *tmp;
 	tmp = head->next;
@@ -95,43 +96,79 @@ int touch_itself(struct snake_body_parts *head)
 }
 //////////////////////////////////////////////////////////////////////////////////////
 
-void game_over_anim(struct snake_body_parts *head,int radius)
+
+void game_over_anim(struct snake_body_parts *head, int radius)
 {
-	int x=7;
-	while(x--)
+	int x = 7;
+	sound(500);
+	delay(200);
+	sound(200);
+	delay(100);
+	nosound();
+	settextstyle(3, 0, 5);
+	while (x--)
 	{
-		if(x%2==0)
+		if (x % 2 == 0)
 			setcolor(WHITE);
 		else
 			setcolor(BLACK);
-		draw_snake(head,radius);
+		draw_snake(head, radius);
+		outtextxy(210, 20, "GAME OVER");
 		delay(300);
 	}
+	settextstyle(0, 0, 1);
 }
 
 void save_game_data(struct snake_body_parts *head, struct normal_food *nf, struct bonus_food *bf, unsigned long score, int level, int face_dir)
 {
 	FILE *f;
-	f=fopen("continue","w+");
-	fprintf(f,"%u\n",score);
-	fprintf(f,"%d\n",level);
-	fprintf(f,"%d\n",face_dir);
-	fprintf(f,"%d %d %d\n",nf->radius,nf->x,nf->y);
-	fprintf(f,"%d %d %d %d %d\n",bf->radius[0],bf->radius[1],bf->time,bf->x,bf->y);
-	while(head!=NULL)
+	f = fopen("continue", "w+");
+	fprintf(f, "%u\n", score);
+	fprintf(f, "%d\n", level);
+	fprintf(f, "%d\n", face_dir);
+	fprintf(f, "%d %d %d\n", nf->radius, nf->x, nf->y);
+	fprintf(f, "%d %d %d %d %d\n", bf->radius[0], bf->radius[1], bf->time, bf->x, bf->y);
+	while (head != NULL)
 	{
-		fprintf(f,"%d %d\n",head->x,head->y);
-		head=head->next;
+		fprintf(f, "%d %d\n", head->x, head->y);
+		head = head->next;
+	}
+	fclose(f);
+}
+
+void read_game_data(struct snake_body_parts *head, struct normal_food *nf, struct bonus_food *bf, unsigned long *score, int *level, int *face_dir)
+{
+	FILE *f;
+	struct snake_body_parts *tmp;
+	int x, y;
+	f = fopen("continue", "r+");
+	fscanf(f, "%u", score);
+	fscanf(f, "%d", level);
+	fscanf(f, "%d", face_dir);
+	fscanf(f, "%d %d %d", &(nf->radius), &(nf->x), &(nf->y));
+	fscanf(f, "%d %d %d %d %d", &(bf->radius[0]), &(bf->radius[1]), &(bf->time), &(bf->x), &(bf->y));
+	fscanf(f, "%d %d", &(head->x), &(head->y));
+	tmp = head;
+	while (fscanf(f, "%d %d", &x, &y) != EOF)
+	{
+		tmp->next = (struct snake_body_parts *)malloc(sizeof(struct snake_body_parts));
+		tmp = tmp->next;
+		tmp->x = x;
+		tmp->y = y;
 	}
 	fclose(f);
 }
 //////////////////////////////////////////////////////////////////////////////////////
 
-int play_game(struct snake_body_parts *head, struct normal_food *nf, struct bonus_food *bf, unsigned long score, int level, int face_dir)
+int play_game(int new_game)
 {
-	int radius = 5, length = 3, incx, incy, delta, maxx, maxy;
+	int radius = 5, length = 3, incx, incy, delta, maxx, maxy, level, face_dir;
+	unsigned long score;
 	char ch, score_text[40];
 	struct board b;
+	struct snake_body_parts *head;
+	struct normal_food *nf;
+	struct bonus_food *bf;
 	maxx = getmaxx();
 	maxy = getmaxy();
 	delta = radius * 2;
@@ -142,7 +179,7 @@ int play_game(struct snake_body_parts *head, struct normal_food *nf, struct bonu
 	b.endx = b.startx + b.lenx;
 	b.endy = b.starty + b.leny;
 	srand(time(0));
-	if (head == NULL)
+	if (new_game == 1)
 	{
 		head = create_default_snake(b.startx + 25, b.starty + 5, radius, length);
 		nf = (struct normal_food *)malloc(sizeof(struct normal_food));
@@ -151,11 +188,20 @@ int play_game(struct snake_body_parts *head, struct normal_food *nf, struct bonu
 		nf->y = ((rand() % 40) * 10) + b.starty + 5;
 		bf = (struct bonus_food *)malloc(sizeof(struct bonus_food));
 		bf->radius[0] = 5;
-		bf->radius[1]=3;
+		bf->radius[1] = 3;
 		bf->x = ((rand() % 40) * 10) + b.startx + 5;
 		bf->y = ((rand() % 40) * 10) + b.starty + 5;
 		bf->time = -10;
 		face_dir = 3;
+		score = 0;
+		level = 1;
+	}
+	else if (new_game == 0)
+	{
+		nf = (struct normal_food *)malloc(sizeof(struct normal_food));
+		bf = (struct bonus_food *)malloc(sizeof(struct bonus_food));
+		head = (struct snake_body_parts *)malloc(sizeof(struct snake_body_parts));
+		read_game_data(head, nf, bf, &score, &level, &face_dir);
 	}
 
 	if (face_dir == 0)
@@ -190,29 +236,29 @@ int play_game(struct snake_body_parts *head, struct normal_food *nf, struct bonu
 			{
 				incy = -10;
 				incx = 0;
-				face_dir=0;
+				face_dir = 0;
 			}
 			else if (ch == 'a' && incx != 10)
 			{
 				incx = -10;
 				incy = 0;
-				face_dir=1;
+				face_dir = 1;
 			}
 			else if (ch == 's' && incy != -10)
 			{
 				incy = 10;
 				incx = 0;
-				face_dir=2;
+				face_dir = 2;
 			}
 			else if (ch == 'd' && incx != -10)
 			{
 				incx = 10;
 				incy = 0;
-				face_dir=3;
+				face_dir = 3;
 			}
 			else if (ch == 27)
 			{
-				save_game_data(head,nf,bf,score,level,face_dir);
+				save_game_data(head, nf, bf, score, level, face_dir);
 				break;
 			}
 		}
@@ -236,6 +282,12 @@ int play_game(struct snake_body_parts *head, struct normal_food *nf, struct bonu
 		}
 		if (head->x == nf->x && head->y == nf->y)
 		{
+
+	// sound(800);
+	// delay(100);
+	// sound(1000);
+	// delay(200);
+	// nosound();
 			nf->x = ((rand() % 40) * 10) + b.startx + 5;
 			nf->y = ((rand() % 40) * 10) + b.starty + 5;
 			head = increase_len(head, radius, incx, incy);
@@ -252,16 +304,16 @@ int play_game(struct snake_body_parts *head, struct normal_food *nf, struct bonu
 			score += (bf->time * 2) + 5;
 			bf->time = -10;
 		}
-		if (touch_itself(head))
+		if (if_touch_itself(head))
 		{
-			game_over_anim(head,radius);
-			break; ///////////////
+			game_over_anim(head, radius);
+			break;
 		}
 		draw_snake(head, radius);
 		circle(nf->x, nf->y, nf->radius);
 		if (bf->time > 0)
 		{
-			circle(bf->x, bf->y, bf->radius[bf->time%2]);
+			circle(bf->x, bf->y, bf->radius[bf->time % 2]);
 			bf->time--;
 			if (bf->time == 0)
 			{
@@ -280,6 +332,6 @@ void main()
 {
 	int gd = DETECT, gm;
 	initgraph(&gd, &gm, "C:\\TC\\BGI");
-	play_game(NULL, NULL, NULL, 0, 1, -1);
+	play_game(1);
 	closegraph();
 }
