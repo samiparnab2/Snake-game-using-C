@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <graphics.h>
 #include <string.h>
-#include<dos.h>
+#include <dos.h>
 //////////////////////////////////////////////////////////////////////////////////////
 struct snake_body_parts
 {
@@ -95,7 +95,6 @@ int if_touch_itself(struct snake_body_parts *head)
 	return 0;
 }
 //////////////////////////////////////////////////////////////////////////////////////
-
 
 void game_over_anim(struct snake_body_parts *head, int radius)
 {
@@ -228,6 +227,7 @@ int play_game(int new_game)
 	while (1)
 	{
 		cleardevice();
+		nosound();
 		rectangle(b.startx, b.starty, b.endx, b.endy);
 		if (kbhit())
 		{
@@ -283,11 +283,7 @@ int play_game(int new_game)
 		if (head->x == nf->x && head->y == nf->y)
 		{
 
-	// sound(800);
-	// delay(100);
-	// sound(1000);
-	// delay(200);
-	// nosound();
+			sound(1000);
 			nf->x = ((rand() % 40) * 10) + b.startx + 5;
 			nf->y = ((rand() % 40) * 10) + b.starty + 5;
 			head = increase_len(head, radius, incx, incy);
@@ -298,6 +294,7 @@ int play_game(int new_game)
 		}
 		if (bf->time > 0 && head->x == bf->x && head->y == bf->y)
 		{
+			sound(1000);
 			head = increase_len(head, radius, incx, incy);
 			bf->x = ((rand() % 40) * 10) + b.startx + 5;
 			bf->y = ((rand() % 40) * 10) + b.starty + 5;
