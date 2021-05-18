@@ -121,7 +121,7 @@ void game_over_anim(struct snake_body_parts *head, int radius)
 void save_game_data(struct snake_body_parts *head, struct normal_food *nf, struct bonus_food *bf, unsigned long score, int level, int face_dir)
 {
 	FILE *f;
-	f = fopen("continue", "w+");
+	f = fopen("CONTINUE", "w+");
 	fprintf(f, "%u\n", score);
 	fprintf(f, "%d\n", level);
 	fprintf(f, "%d\n", face_dir);
@@ -140,7 +140,7 @@ void read_game_data(struct snake_body_parts *head, struct normal_food *nf, struc
 	FILE *f;
 	struct snake_body_parts *tmp;
 	int x, y;
-	f = fopen("continue", "r+");
+	f = fopen("CONTINUE", "r+");
 	fscanf(f, "%u", score);
 	fscanf(f, "%d", level);
 	fscanf(f, "%d", face_dir);
@@ -156,6 +156,7 @@ void read_game_data(struct snake_body_parts *head, struct normal_food *nf, struc
 		tmp->y = y;
 	}
 	fclose(f);
+	system("rm C:\\TC\\CONTINUE");
 }
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -325,10 +326,64 @@ int play_game(int new_game)
 	}
 	return 1;
 }
+int main_menu()
+{
+	int i, lower_i, upper_i;
+	char ch;
+	lower_i = 0;
+	upper_i = 4;
+	i = lower_i;
+	cleardevice();
+	settextstyle(4, 0, 8);
+	outtextxy(120, 50, "SNAKE-N");
+	settextstyle(3, 0, 3);
+	outtextxy(120, 240, "CONTINUE");
+	outtextxy(120, 280, "NEW GAME");
+	outtextxy(120, 320, "HIGHEST SCORE");
+	outtextxy(120, 360, "DIFICULTY");
+	outtextxy(120, 400, "QUIT");
+	settextstyle(0, 0, 1);
+	outtextxy(250, 450, "PRESS M TO SELECT");
+	while (1)
+	{
+		rectangle(100, 253 + (40 * i), 105, 258 + (40 * i));
+		do
+		{
+			ch = getch();
+		} while (ch != 'w' && ch != 's' && ch != 'm');
+		if (ch == 'm')
+			return i;
+		setcolor(BLACK);
+		rectangle(100, 253 + (40 * i), 105, 258 + (40 * i));
+		setcolor(WHITE);
+		if (ch == 'w')
+		{
+			i--;
+			if (i < lower_i)
+				i = upper_i;
+		}
+		else if (ch == 's')
+		{
+			i++;
+			if (i > upper_i)
+				i = lower_i;
+		}
+	}
+}
 void main()
 {
-	int gd = DETECT, gm;
+	int gd = DETECT, gm, choice;
 	initgraph(&gd, &gm, "C:\\TC\\BGI");
-	play_game(1);
+	while (1)
+	{
+		choice = main_menu();
+		if (choice == 4)
+			break;
+		else if (choice == 0)
+			play_game(0);
+		else if (choice == 1)
+			play_game(1);
+	}
+	//	play_game(1);
 	closegraph();
 }
