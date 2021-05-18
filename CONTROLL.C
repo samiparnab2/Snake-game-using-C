@@ -26,6 +26,7 @@ struct bonus_food
 	int x, y, time, radius[2];
 };
 
+void end_continue();
 void move_snake_body(struct snake_body_parts *head)
 {
 	if ((head->next)->next != NULL)
@@ -122,6 +123,7 @@ void save_game_data(struct snake_body_parts *head, struct normal_food *nf, struc
 {
 	FILE *f;
 	f = fopen("CONTINUE", "w+");
+	fprintf(f, "1\n");
 	fprintf(f, "%u\n", score);
 	fprintf(f, "%d\n", level);
 	fprintf(f, "%d\n", face_dir);
@@ -135,12 +137,15 @@ void save_game_data(struct snake_body_parts *head, struct normal_food *nf, struc
 	fclose(f);
 }
 
-void read_game_data(struct snake_body_parts *head, struct normal_food *nf, struct bonus_food *bf, unsigned long *score, int *level, int *face_dir)
+int read_game_data(struct snake_body_parts *head, struct normal_food *nf, struct bonus_food *bf, unsigned long *score, int *level, int *face_dir)
 {
 	FILE *f;
 	struct snake_body_parts *tmp;
 	int x, y;
 	f = fopen("CONTINUE", "r+");
+	fscanf(f, "%u", score);
+	if (*score == 0)
+		return 0;
 	fscanf(f, "%u", score);
 	fscanf(f, "%d", level);
 	fscanf(f, "%d", face_dir);
@@ -156,7 +161,26 @@ void read_game_data(struct snake_body_parts *head, struct normal_food *nf, struc
 		tmp->y = y;
 	}
 	fclose(f);
-	system("rm C:\\TC\\CONTINUE");
+	end_continue();
+	return 1;
+}
+
+void end_continue()
+{
+	FILE *f;
+	f = fopen("CONTINUE", "w");
+	fprintf(f, "0\n");
+	fclose(f);
+}
+
+int if_continue()
+{
+	FILE *f;
+	int x;
+	f = fopen("CONTINUE", "r");
+	fscanf(f, "%d", &x);
+	fclose(f);
+	return x;
 }
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -305,6 +329,7 @@ int play_game(int new_game)
 		if (if_touch_itself(head))
 		{
 			game_over_anim(head, radius);
+			end_continue();
 			break;
 		}
 		draw_snake(head, radius);
@@ -330,20 +355,24 @@ int main_menu()
 {
 	int i, lower_i, upper_i;
 	char ch;
-	lower_i = 0;
+	lower_i = 1;
 	upper_i = 4;
-	i = lower_i;
 	cleardevice();
 	settextstyle(4, 0, 8);
 	outtextxy(120, 50, "SNAKE-N");
 	settextstyle(3, 0, 3);
-	outtextxy(120, 240, "CONTINUE");
+	if (if_continue())
+	{
+		outtextxy(120, 240, "CONTINUE");
+		lower_i = 0;
+	}
 	outtextxy(120, 280, "NEW GAME");
 	outtextxy(120, 320, "HIGHEST SCORE");
 	outtextxy(120, 360, "DIFICULTY");
 	outtextxy(120, 400, "QUIT");
 	settextstyle(0, 0, 1);
 	outtextxy(250, 450, "PRESS M TO SELECT");
+	i = lower_i;
 	while (1)
 	{
 		rectangle(100, 253 + (40 * i), 105, 258 + (40 * i));
@@ -384,6 +413,5 @@ void main()
 		else if (choice == 1)
 			play_game(1);
 	}
-	//	play_game(1);
 	closegraph();
 }
