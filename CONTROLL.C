@@ -1,10 +1,10 @@
 #include <stdio.h>
-// #include<conio.h>
+#include<conio.h>
 #include <stdlib.h>
 #include <graphics.h>
 #include <string.h>
 #include <dos.h>
-//////////////////////////////////////////////////////////////////////////////////////
+
 struct snake_body_parts
 {
 	int x, y;
@@ -95,7 +95,6 @@ int if_touch_itself(struct snake_body_parts *head)
 	}
 	return 0;
 }
-//////////////////////////////////////////////////////////////////////////////////////
 
 void game_over_anim(struct snake_body_parts *head, int radius, unsigned long score)
 {
@@ -297,7 +296,6 @@ unsigned long get_highest_score()
 	}
 	return score;
 }
-//////////////////////////////////////////////////////////////////////////////////////
 
 int play_game(int new_game, int difficulty)
 {
