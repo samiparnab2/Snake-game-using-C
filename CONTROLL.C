@@ -97,9 +97,9 @@ int if_touch_itself(struct snake_body_parts *head)
 }
 //////////////////////////////////////////////////////////////////////////////////////
 
-void game_over_anim(struct snake_body_parts *head, int radius,unsigned long score)
+void game_over_anim(struct snake_body_parts *head, int radius, unsigned long score)
 {
-	int x = 7,difficulty;
+	int x = 7, difficulty;
 	FILE *f;
 	char ch;
 	sound(500);
@@ -118,23 +118,23 @@ void game_over_anim(struct snake_body_parts *head, int radius,unsigned long scor
 		outtextxy(210, 20, "GAME OVER");
 		delay(300);
 	}
-	if ( get_highest_score() < score)
-			{
-				difficulty=get_difficulty();
-				f = fopen("GAMEDATA", "w");
-				fprintf(f, "%u\n", score);
-				fprintf(f, "%d\n", difficulty);
-				fclose(f);
-				cleardevice();
-				settextstyle(3, 0, 5);
-				outtextxy(30, 200, "===NEW HIGHEST SCORE===");
-				settextstyle(0, 0, 1);
-				outtextxy(250, 450, "PRESS F TO GO BACK");
-				do
-				{
-					ch = getch();
-				} while (ch != 'f');
-			}
+	if (get_highest_score() < score)
+	{
+		difficulty = get_difficulty();
+		f = fopen("GAMEDATA", "w");
+		fprintf(f, "%u\n", score);
+		fprintf(f, "%d\n", difficulty);
+		fclose(f);
+		cleardevice();
+		settextstyle(3, 0, 5);
+		outtextxy(30, 200, "===NEW HIGHEST SCORE===");
+		settextstyle(0, 0, 1);
+		outtextxy(250, 450, "PRESS F TO GO BACK");
+		do
+		{
+			ch = getch();
+		} while (ch != 'f' && ch != 'F');
+	}
 	settextstyle(0, 0, 1);
 }
 
@@ -207,19 +207,19 @@ void show_highestscore()
 	do
 	{
 		ch = getch();
-	} while (ch != 'f');
+	} while (ch != 'f' && ch != 'F');
 }
 
 void change_difficulty()
 {
 	int difficulty = 8, lower_d, upper_d;
-	char  diff_text[10], ch;
+	char diff_text[10], ch;
 	unsigned long dummy;
 	FILE *f;
 	lower_d = 1;
 	upper_d = 10;
-	dummy=get_highest_score();
-	difficulty=get_difficulty();
+	dummy = get_highest_score();
+	difficulty = get_difficulty();
 	cleardevice();
 
 	outtextxy(250, 435, "HIGHER:W   LOWER:S");
@@ -234,10 +234,10 @@ void change_difficulty()
 		do
 		{
 			ch = getch();
-		} while (ch != 'w' && ch != 's' && ch != 'f');
-		if (ch == 'f')
+		} while (ch != 'w' && ch != 's' && ch != 'f' && ch != 'W' && ch != 'S' && ch != 'F');
+		if (ch == 'f' || ch == 'F')
 			break;
-		else if (ch == 'w')
+		else if (ch == 'w' || ch == 'W')
 		{
 			setcolor(BLACK);
 			outtextxy(100, 160, diff_text);
@@ -246,7 +246,7 @@ void change_difficulty()
 				difficulty = lower_d;
 			setcolor(WHITE);
 		}
-		else if (ch == 's')
+		else if (ch == 's' || ch == 'S')
 		{
 			setcolor(BLACK);
 			outtextxy(100, 160, diff_text);
@@ -268,7 +268,7 @@ int get_difficulty()
 	unsigned long dummy;
 	int difficulty;
 	difficulty = 8;
-	dummy=1;
+	dummy = 1;
 	f = fopen("GAMEDATA", "r");
 	if (f != NULL)
 	{
@@ -278,8 +278,8 @@ int get_difficulty()
 	else
 	{
 		f = fopen("GAMEDATA", "w");
-		fprintf(f, "%u\n",dummy);
-		fprintf(f, "%d\n",difficulty);
+		fprintf(f, "%u\n", dummy);
+		fprintf(f, "%d\n", difficulty);
 	}
 	fclose(f);
 	return difficulty;
@@ -288,12 +288,12 @@ int get_difficulty()
 unsigned long get_highest_score()
 {
 	FILE *f;
-	unsigned long score=1;
+	unsigned long score = 1;
 	f = fopen("GAMEDATA", "r");
 	if (f != NULL)
 	{
-	fscanf(f, "%u", &score);
-	fclose(f);
+		fscanf(f, "%u", &score);
+		fclose(f);
 	}
 	return score;
 }
@@ -373,25 +373,25 @@ int play_game(int new_game, int difficulty)
 		if (kbhit())
 		{
 			ch = getche();
-			if (ch == 'w' && incy != 10)
+			if ((ch == 'w' || ch == 'W') && incy != 10)
 			{
 				incy = -10;
 				incx = 0;
 				face_dir = 0;
 			}
-			else if (ch == 'a' && incx != 10)
+			else if ((ch == 'a' || ch == 'A') && incx != 10)
 			{
 				incx = -10;
 				incy = 0;
 				face_dir = 1;
 			}
-			else if (ch == 's' && incy != -10)
+			else if ((ch == 's' || ch == 'S') && incy != -10)
 			{
 				incy = 10;
 				incx = 0;
 				face_dir = 2;
 			}
-			else if (ch == 'd' && incx != -10)
+			else if ((ch == 'd' || ch == 'D') && incx != -10)
 			{
 				incx = 10;
 				incy = 0;
@@ -444,7 +444,7 @@ int play_game(int new_game, int difficulty)
 		}
 		if (if_touch_itself(head))
 		{
-			game_over_anim(head, radius,score);
+			game_over_anim(head, radius, score);
 			break;
 		}
 		draw_snake(head, radius);
@@ -495,19 +495,19 @@ int main_menu()
 		do
 		{
 			ch = getch();
-		} while (ch != 'w' && ch != 's' && ch != 'f');
-		if (ch == 'f')
+		} while (ch != 'w' && ch != 's' && ch != 'f' && ch != 'W' && ch != 'S' && ch != 'F');
+		if (ch == 'f' || ch == 'F')
 			return i;
 		setcolor(BLACK);
 		rectangle(100, 253 + (40 * i), 105, 258 + (40 * i));
 		setcolor(WHITE);
-		if (ch == 'w')
+		if (ch == 'w' || ch == 'W')
 		{
 			i--;
 			if (i < lower_i)
 				i = upper_i;
 		}
-		else if (ch == 's')
+		else if (ch == 's' || ch == 'S')
 		{
 			i++;
 			if (i > upper_i)
