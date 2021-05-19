@@ -28,21 +28,55 @@ This is the snake game written in C for DOS using BGI library.
             make
             make install
             ```
-    1. Now you can run DOSBOX by typing __dosbox__ in terminal.
+         Now you can run DOSBOX by typing __dosbox__ in terminal.
 
-    1. Now extract tc3.zip folder to your __home (/~)__ directory.
+    1. Now extract __tc3.zip__ file to your __home (/~)__ directory.
     1. open terminal and run __dosbox__.
     1. In __dosbox__ type these commands -
         ```dos
-            mount c: ~
-            c:
-            cd tc3
-            install
+        mount c: ~
+        c:
+        cd tc3
+        install
         ```
     1. The __TURBO-C++__ setup will open then hit __ENTER__.
     1. Change the __SOURCE DRIVE__ TO __C__ and hit __ENTER__.
     1. Check if __SOURCE PATH__ should be __\tc3__ and hit 
     __ENTER__.
     1. Goto __Start Installation__ , hit ENTER and wait for the Installation process to be finished.
-    1. Now __TURBO-C++__ is installed  
+    1. Now __TURBO-C++__ is installed.
+    1. To open __TURBO-C++__ automatically within dosbox go to __~/.dosbox__ , open the __.conf__ file and add these lines to the end of the file -
+        ```dos
+        mount c: ~
+        c:
+        cd TC/BIN
+        TC
+        ```
+        Now __TURBO-C++__ will automatically start when you open dosbox.
+* __Steps for Windows__
 
+    1. download __dosbox__ from [here](https://www.dosbox.com/download.php?main=1).
+    1. Open the setup and Install (add shortcut to desktop for easy access).
+    1. Now go to __C:__ Drive and create a folder named __TC__ .
+    1. Extract __tc3.zip__ file to  __C:\TC\\__ directory.
+    1. Run __dosbox__.
+    1. In __dosbox__ type these commands -
+        ```dos
+        mount c: C:\TC\
+        c:
+        cd tc3
+        install
+        ```
+    1. The __TURBO-C++__ setup will open then hit __ENTER__.
+    1. Change the __SOURCE DRIVE__ TO __C__ and hit __ENTER__.
+    1. Check if __SOURCE PATH__ should be __\tc3__ and hit 
+    __ENTER__.
+    1. Goto __Start Installation__ , hit ENTER and wait for the Installation process to be finished.
+    1. Now __TURBO-C++__ is installed. To open __TURBO-C++__ automatically within dosbox go to __~/.dosbox__ , open the __.conf__ file and add these lines to the end of the file -
+        ```dos
+        mount c: ~
+        c:
+        cd TC/BIN
+        TC
+        ```
+        Now __TURBO-C++__ will automatically start when you open dosbox.
