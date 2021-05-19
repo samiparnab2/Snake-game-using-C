@@ -6,6 +6,10 @@ This is the snake game written in C for DOS using BGI library.
 * DOSBOX Emulator
 * TURBO-C++ 
 
+## Visual Demo
+
+![](https://media.giphy.com/media/LP0RU3fpLSEXpW6SOl/giphy.gif)
+
 ## How to Run
 
 
