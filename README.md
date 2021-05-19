@@ -30,7 +30,7 @@ This is the snake game written in C for DOS using BGI library.
             ```
          Now you can run DOSBOX by typing __dosbox__ in terminal.
 
-    1. Now extract __tc3.zip__ file to your __home (/~)__ directory.
+    1. Now extract __tc3.zip__ file to your __home (~/)__ directory.
     1. open terminal and run __dosbox__.
     1. In __dosbox__ type these commands -
         ```dos
@@ -80,3 +80,8 @@ This is the snake game written in C for DOS using BGI library.
         TC
         ```
         Now __TURBO-C++__ will automatically start when you open dosbox.
+* Now download this repository and move __GAME(NO_REFRESH).C__ and __GAME(REFRESH).C__ files to  __~/TC/BIN__ _(for Linux)_  or   __C:\TC\TC\BIN__ _(for Windows)_.
+* Run dosbox.
+* __Turbo-c++__ should be opened automatically. Goto __File>Open__ and open any of these __GAME(NO_REFRESH).C__ and __GAME(REFRESH).C__ files.
+* Go to __Option>Linker>Libraries__ and make sure that __Graphics Library__ is checked.
+* Press __Alt+R__ and run the game.
