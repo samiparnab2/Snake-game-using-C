@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include<conio.h>
+#include <conio.h>
 #include <stdlib.h>
 #include <graphics.h>
 #include <string.h>
