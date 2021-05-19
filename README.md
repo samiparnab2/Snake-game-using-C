@@ -23,7 +23,7 @@ This is the snake game written in C for DOS using BGI library.
         ```
         For other Linux flavors like RHEL, CentOS, and Fedora, you can compile and install it from the source as follows.
 
-        1. download __dosbox__ from [here](https://www.dosbox.com/download.php?main=1)
+        1. Download __dosbox__ from [here](https://www.dosbox.com/download.php?main=1)
         1. Extract the tar.gz file of DOSBOX Setup.
         1. Go to the extracted folder.
         1. Run these commands as __sudo__ -
@@ -35,7 +35,7 @@ This is the snake game written in C for DOS using BGI library.
          Now you can run DOSBOX by typing __dosbox__ in terminal.
 
     1. Now extract __tc3.zip__ file to your __home (~/)__ directory.
-    1. open terminal and run __dosbox__.
+    1. Open terminal and run __dosbox__.
     1. In __dosbox__ type these commands -
         ```dos
         mount c: ~
@@ -59,7 +59,7 @@ This is the snake game written in C for DOS using BGI library.
         Now __TURBO-C++__ will automatically start when you open dosbox.
 * __Steps for Windows__
 
-    1. download __dosbox__ from [here](https://www.dosbox.com/download.php?main=1).
+    1. Download __dosbox__ from [here](https://www.dosbox.com/download.php?main=1).
     1. Open the setup and Install (add shortcut to desktop for easy access).
     1. Now go to __C:__ Drive and create a folder named __TC__ .
     1. Extract __tc3.zip__ file to  __C:\TC\\__ directory.
