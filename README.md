@@ -78,7 +78,7 @@ This is the snake game written in C for DOS using BGI library.
     1. Goto __Start Installation__ , hit ENTER and wait for the Installation process to be finished.
     1. Now __TURBO-C++__ is installed. To open __TURBO-C++__ automatically within dosbox go to __~/.dosbox__ , open the __.conf__ file and add these lines to the end of the file -
         ```dos
-        mount c: ~
+        mount c: C:\tc\
         c:
         cd TC/BIN
         TC
