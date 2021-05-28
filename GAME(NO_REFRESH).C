@@ -496,7 +496,6 @@ int main_menu()
 		outtextxy(120, 240, "CONTINUE");
 		lower_i = 0;
 	}
-	
 	outtextxy(120, 280, "NEW GAME");
 	outtextxy(120, 320, "HIGHEST SCORE");
 	outtextxy(120, 360, "DIFICULTY");
