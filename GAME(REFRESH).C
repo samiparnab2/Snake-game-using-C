@@ -5,6 +5,7 @@
 #include <string.h>
 #include <dos.h>
 
+
 struct snake_body_parts
 {
 	int x, y;
